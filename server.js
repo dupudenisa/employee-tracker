@@ -1,6 +1,8 @@
 const inquirer = require("inquirer")
 const mysql = require("mysql")
 
+var PORT = process.env.PORT || 3000;
+
 const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -16,7 +18,7 @@ connection.connect(function(err){
 
 });
 
-function(teams){
+function promptFunc(teams){
 
     inquirer
         .prompt([
