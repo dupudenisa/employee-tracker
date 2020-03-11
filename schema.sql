@@ -12,8 +12,7 @@ CREATE TABLE IF NOT EXISTS department(
 SELECT * FROM department;
 
 CREATE TABLE IF NOT EXISTS deprole (
-  id INT AUTO_INCREMENT 
-, roletitle VARCHAR(30) NOT NULL 
+  id INT AUTO_INCREMENT  
 , title VARCHAR(30) NOT NULL
 , salary DECIMAL(10,2) NOT NULL 
 , department_id INT NOT NULL 
