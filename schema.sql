@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS deprole (
 , salary DECIMAL(10,2) NOT NULL 
 , department_id INT NOT NULL 
 , PRIMARY KEY(deprole_id)
+,FOREIGN KEY (department_id) REFERENCES department (department_id)
 );
 SELECT * FROM deprole;
 
@@ -28,6 +29,9 @@ CREATE TABLE IF NOT EXISTS employee (
 , manager_id INT 
 , department_id INT NOT NULL
 , PRIMARY KEY (employee_id) 
+,FOREIGN KEY (role_id) REFERENCES deprole (deprole_id)
+,FOREIGN KEY (manager_id) REFERENCES employee (employee_id)
+,FOREIGN KEY (department_id) REFERENCES deprole (department_id)
 );
 SELECT * FROM employee;
 

@@ -36,7 +36,7 @@ function promptFunc(num){
         console.log(response.question);
             switch (response.question) {
                 case "Add departments" :
-                    console.log("add departments");
+                    
                     inquirer.prompt([
                         {
                             type: "list",
@@ -56,7 +56,7 @@ function promptFunc(num){
                 break;
                     
                 case "Add roles" :
-                    console.log("Add roles");
+                    
                     inquirer.prompt([
                         {
                             type: "list",
@@ -76,7 +76,7 @@ function promptFunc(num){
                     break;
 
                 case "Add employees":
-                    console.log("add employees");
+                    
                     inquirer.prompt([
                         {
                             type:"message",
@@ -122,40 +122,40 @@ function promptFunc(num){
                     break;
 
                 case "View departments":
-                    console.log("view departments");
+                    
                 
                     var sql = "SELECT * FROM department";
 
                     connection.query(sql,function(err,res) {
                         if (err) throw err;
-                        console.log(res);
+                        console.table(res);
                     })
                     break;
                 case "View roles":
-                    console.log("view roles");
+                    
                     var sql = "SELECT * FROM deprole";
 
                     connection.query(sql,function(err,res) {
                         if (err) throw err;
-                        console.log(res);
+                        console.table(res);
                     })
                     num = 0;
                     break;
 
                 case "View employees":
-                    console.log("view employees");
+                    
 
                     var sql = "SELECT * FROM employee";
 
                         connection.query(sql,function(err,res) {
                             if (err) throw err;
-                            console.log(res);
+                            console.table(res);
                         })
                     num= 0; 
                     break;
 
                 case "update employee roles":
-                    console.log("update employee roles");
+                    
                     connection.query("", function(err,res){
     
                     })
