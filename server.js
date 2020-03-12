@@ -3,6 +3,8 @@ const mysql = require("mysql")
 
 var PORT = process.env.PORT || 3000;
 
+const num = 0;
+
 const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -18,7 +20,7 @@ connection.connect(function(err){
 
 });
 
-function promptFunc(){
+function promptFunc(num){
 
     inquirer
         .prompt([
@@ -26,7 +28,7 @@ function promptFunc(){
                 type: "list",
                 message: "What would you like to do?",
                 name: "question",
-                choices: ["Add roles", "View departments", "Update departments"]
+                choices: ["Add departments","Add roles","Add employees", "View departments","View roles","View employees", "Update departments"]
             }
         
 
@@ -35,7 +37,22 @@ function promptFunc(){
             switch (response.question) {
                 case "Add departments" :
                     console.log("add departments");
-                    
+                    inquirer.prompt([
+                        {
+                            type: "list",
+                            message: "What department would you like to add?",
+                            name: "departments",
+                            choices: ["sales","marketing","it"]
+                        }
+
+                    ]).then(function(response){
+                        var sql = "INSERT INTO department (department_name) VALUES ('" + response.departments + "')";
+                        connection.query(sql,function(err,res) {
+                            if (err) throw err;
+                            console.log("department record inserted");
+                        })
+                    })
+                    num = 0;
                 break;
                     
                 case "Add roles" :
@@ -55,61 +72,86 @@ function promptFunc(){
                             console.log("role record inserted");
                         })
                     })
-                    
+                    num = 0;
                     break;
 
-                case "add employees":
+                case "Add employees":
                     console.log("add employees");
                     inquirer.prompt([
                         {
-                            type:"list",
+                            type:"message",
                             message: "What is the first name of your employee?",
                             name: "firstname",
                            
                         },
                         {
-                            type: "list",
+                            type: "message",
                             message: "What is the last name of your employee?",
                             name: "lastname",
                         },
                         {
-                            type: "list",
+                            type: "message",
                             message: "What is the role of your employee?",
                             name: "role",
+                            //choices: ["CEO","CFO","Manager"]
                         },
                         {
-                            type: "list",
+                            type: "message",
                             message: "What is the manager of the employee?",
                             name:"manager",
                         },
                         {
-                            type: "list",
+                            type: "message",
                             message: "what department is your employee in?",
                             name: "dep",
+                            //choices: ["sale0s","marketing","it"]
                         },
-                    ])
+                    ]).then(function(response){
 
-                    
+                        var sql = "INSERT INTO employee (first_name, last_name, role_id, manager_id, department_id) VALUES ('" + response.firstname + "', '" + response.lastname + "','" + response.dep + "', '" + response.manager + "','" + response.dep + "')";
+
+
+                        connection.query(sql,function(err,res) {
+                            if (err) throw err;
+                            console.log("employee record inserted");
+                        })
+
+                    })
+
+                    num = 0;
                     break;
 
-                case "view departments":
+                case "View departments":
                     console.log("view departments");
-                    connection.query("", function(err,res){
-    
-                     })
+                
+                    var sql = "SELECT * FROM department";
+
+                    connection.query(sql,function(err,res) {
+                        if (err) throw err;
+                        console.log(res);
+                    })
                     break;
-                case "view roles":
+                case "View roles":
                     console.log("view roles");
-                    connection.query("", function(err,res){
-    
+                    var sql = "SELECT * FROM deprole";
+
+                    connection.query(sql,function(err,res) {
+                        if (err) throw err;
+                        console.log(res);
                     })
+                    num = 0;
                     break;
 
-                case "view employees":
+                case "View employees":
                     console.log("view employees");
-                    connection.query("", function(err,res){
 
-                    })
+                    var sql = "SELECT * FROM employee";
+
+                        connection.query(sql,function(err,res) {
+                            if (err) throw err;
+                            console.log(res);
+                        })
+                    num= 0; 
                     break;
 
                 case "update employee roles":
@@ -117,23 +159,38 @@ function promptFunc(){
                     connection.query("", function(err,res){
     
                     })
+                    num = 0; 
                     break;
     
-    
+                    
+                case "Done":
+                {
+                    num = 1;
+                }
     
                 default: 
-                    {
-                        if(err){
-                            throw err;
-                        }
-                    }
+                    num = 0; 
                 break;
                 
             }
             
+            
         
 
     })
+    
 }
-      
-promptFunc();
+
+/*
+trying to make prompt reset every time prompt is awnsered 
+
+function promptReset(num){
+    while(num != 1)
+    {
+        promptFunc(num);
+    }
+}
+*/
+
+promptFunc(num);
+
