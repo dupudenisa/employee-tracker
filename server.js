@@ -18,7 +18,7 @@ connection.connect(function(err){
 
 });
 
-function promptFunc(teams){
+function promptFunc(){
 
     inquirer
         .prompt([
@@ -26,32 +26,70 @@ function promptFunc(teams){
                 type: "list",
                 message: "What would you like to do?",
                 name: "question",
-                choices: ["Add departments", "View departments", "Update departments"]
+                choices: ["Add roles", "View departments", "Update departments"]
             }
         
 
     ]).then(function(response){
-        console.log(response.question){
+        console.log(response.question);
             switch (response.question) {
-                case "add departments" :
+                case "Add departments" :
                     console.log("add departments");
-                    connection.query("SELECT * FROM department JOIN deprole on department.id = deprole.department_id",function(err,res) {
-                            
-                    })
+                    
                 break;
+                    
+                case "Add roles" :
+                    console.log("Add roles");
+                    inquirer.prompt([
+                        {
+                            type: "list",
+                            message: "What role would you like to add?",
+                            name: "roles",
+                            choices: ["CEO","CFO","Manager"]
+                        }
 
-                case "add roles" :
-                    console.log("add roles");
-                    connection.query(" SELECT * FROM deprole JOIN on ", function(err,res){
-                        
+                    ]).then(function(response){
+                        var sql = "INSERT INTO deprole (title, salary, department_id) VALUES ('" + response.roles + "', 1.00, 1)";
+                        connection.query(sql,function(err,res) {
+                            if (err) throw err;
+                            console.log("role record inserted");
+                        })
                     })
+                    
                     break;
 
                 case "add employees":
                     console.log("add employees");
-                    connection.query("", function(err,res){
+                    inquirer.prompt([
+                        {
+                            type:"list",
+                            message: "What is the first name of your employee?",
+                            name: "firstname",
+                           
+                        },
+                        {
+                            type: "list",
+                            message: "What is the last name of your employee?",
+                            name: "lastname",
+                        },
+                        {
+                            type: "list",
+                            message: "What is the role of your employee?",
+                            name: "role",
+                        },
+                        {
+                            type: "list",
+                            message: "What is the manager of the employee?",
+                            name:"manager",
+                        },
+                        {
+                            type: "list",
+                            message: "what department is your employee in?",
+                            name: "dep",
+                        },
+                    ])
 
-                    })
+                    
                     break;
 
                 case "view departments":
@@ -93,8 +131,9 @@ function promptFunc(teams){
                 
             }
             
-        }
+        
 
     })
 }
       
+promptFunc();
